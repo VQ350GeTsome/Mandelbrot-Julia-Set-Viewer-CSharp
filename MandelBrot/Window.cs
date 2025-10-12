@@ -156,7 +156,7 @@ namespace MandelBrot
                     MandelMath.changePower(0.01); regen(); printData(); break;
 
                 case Keys.S:
-                    MandelMath.changePower(-0.01); regen(); break;
+                    MandelMath.changePower(-0.01); regen(); printData(); break;
 
                 case Keys.J:
                     Point screenPos1 = Cursor.Position, clientPos1 = this.PointToClient(screenPos1); //Gets the current mouses position
@@ -168,13 +168,13 @@ namespace MandelBrot
                     regen(); printData(); break;
 
                 case Keys.D0:
-                    zoom = 1.00; center = new ComplexNumber(-0.5, 0); regen(); break;
+                    zoom = 1.00; center = new ComplexNumber(-0.5, 0); regen(); printData(); break;
 
                 case Keys.D1:
-                    zoom = 0.75; center = new ComplexNumber(0.0, 0); regen(); break;
+                    zoom = 0.75; center = new ComplexNumber(0.0, 0); regen(); printData();  break;
 
                 case Keys.M:
-                    mandel = true; regen(); break;
+                    mandel = true; regen(); printData(); break;
 
                 case Keys.O:
                     Point screenPos2 = Cursor.Position, clientPos2 = this.PointToClient(screenPos2); //Gets the current mouses position
