@@ -29,7 +29,7 @@ namespace MandelBrot
             canvas = new Bitmap(width, height, PixelFormat.Format24bppRgb); //Initialize a canvas using the height & width
 
             //Initialize settings
-            iterations = 100;                                                //How many iterations we will do
+            iterations = 1000;                                                //How many iterations we will do
             paletteSize = 33;
             gradient = new GradientColor(); 
             gradient.setColors(Gradients.favoriteColors, Gradients.favoriteStops);   //Initiate the gradient, picked from Gradients
@@ -105,6 +105,7 @@ namespace MandelBrot
             this.Invalidate();
         }
 
+        #region MandelControls
         //-------Controls--------
         //Mouse:
         //  Left-Click : Zoom in  by zoomChange on mouses cords
@@ -117,10 +118,10 @@ namespace MandelBrot
         //  J: Print out a Julia set given the current mouse position
         //  M: Reset to MandelBrot
         //  O: Print Orbit
+        //  Q: Increase iterations
+        //  A: Decrease iterations
         //  0: Reset zoom & center to 1.00 (-0.5, 0i)
         //  1: Reset zoom & center to 0.75 (0, 0i)
-        #region MandelControls
-        //Left click = zoom in, right click = zoom out, middle click = increase iterations
         private void clicks(object sender, MouseEventArgs e)
         {
 
@@ -139,7 +140,6 @@ namespace MandelBrot
             }
             regen(); printData();
         }
-        //Scroll up = gradient length++, scroll down = gradient length--;
         private void scrolls(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0) { paletteSize += (e.Delta) / 120; }
@@ -147,7 +147,6 @@ namespace MandelBrot
             gradient.generatePalette(paletteSize);
             printData();
         }
-        //
         private void keys(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -182,6 +181,10 @@ namespace MandelBrot
                     int y2 = Math.Max(Math.Min(clientPos2.Y, height), 0);
 
                     printOrbit(x2, y2); break;
+                case Keys.Q:
+                    iterations += 10; regen(); printData(); break;
+                case Keys.A:
+                    iterations -= 10; regen(); printData(); break;
             }
         }
         #endregion
