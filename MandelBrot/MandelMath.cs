@@ -11,7 +11,7 @@ namespace MandelBrot
     internal class MandelMath
     {
         private static double epsilon = 0.000000001,
-            power = 2.0; //What to exponentiate Z by (Z = Z^(power) + C)
+            power = 25; //What to exponentiate Z by (Z = Z^(power) + C)
                 
         private static int width, height;
 
@@ -82,5 +82,6 @@ namespace MandelBrot
             return new Point((int)x, (int)y);
         }
         public static void changePower(double delta) { power += delta; power = (power < 1) ? 1 : power; }
+        public static double getPower() { return Math.Round(power, 8); }
     }
 }

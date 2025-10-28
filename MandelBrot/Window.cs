@@ -19,6 +19,7 @@ namespace MandelBrot
         private ComplexNumber center, jz;
         private bool mandel = true; //if true in mandel space, else julia
         private int[,] screenQ;
+        private Color inSetColor = Color.Black;
 
         public Window()
         {
@@ -37,7 +38,7 @@ namespace MandelBrot
             gradient.generatePalette(paletteSize);                           //Calculate the gradient
             zoom = 1.0;                                                      //Initiate the 'camera' zoom
             zoomChange = 5.0;                                                //Initiate how much to zoom in by
-            powChange = 0.1;                                                //Initiate how much to exponentiate z by
+            powChange = 0.01;                                                //Initiate how much to exponentiate z by
             center = new ComplexNumber(-0.5, 0);                             //Initiate center of 'camera'
             MandelMath.setWidthHeight(width, height);
 
@@ -101,9 +102,25 @@ namespace MandelBrot
             for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)
                 {
                     q = screenQ[x, y];
-                    canvas.SetPixel(x, y, (q == -1) ? Color.Black : gradient.getColor(q));  //If q is in the set (-1) paint the pixel black, else the color depends how how fast it diverged
+                    canvas.SetPixel(x, y, (q == -1) ? inSetColor : gradient.getColor(q));  //If q is in the set (-1) paint the pixel black, else the color depends how how fast it diverged
                 }
             this.Invalidate();
+        }
+        //Returns a string of information on the current window
+        private String getInformation()
+        {
+            String juliaC = "";
+            if (!mandel)
+            {
+                juliaC = jz.ToString();
+                juliaC = "Julia C: " + juliaC;
+            }
+
+            return "Center: " + center.ToString() + "\n"
+                    + "Zoom: " + zoom + "\n"
+                    + "n: " + MandelMath.getPower().ToString() + "\n"
+                    + "Julia? " + !mandel + "\n"
+                    + juliaC + "\n";
         }
 
         #region MandelControls
@@ -188,7 +205,9 @@ namespace MandelBrot
                     iterations -= 10; regen(); printData(); break;
                 case Keys.P:
                     String confirm = ScreenShotter.SaveBitmapAsPng(canvas); //Pass in the canvas and the number
-                    MessageBox.Show(confirm);
+                    MessageBox.Show(confirm); break;
+                case Keys.I:
+                    MessageBox.Show(getInformation());
                     break;
             }
         }

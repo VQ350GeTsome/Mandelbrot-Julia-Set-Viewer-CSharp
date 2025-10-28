@@ -37,7 +37,7 @@ namespace MandelBrot
         public static readonly double[] iceAuroraStops = new double[] { 0.0, 0.10, 0.30, 0.50, 0.75, 1.0 };
 
         // Sunset warm gradient
-        public static readonly System.Drawing.Color[] sunsetColors = new System.Drawing.Color[]
+        public static readonly Color[] sunsetColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 10, 10, 30),    // 0.00 deep indigo
             System.Drawing.Color.FromArgb(255, 60, 10, 90),    // 0.15 purple
@@ -49,7 +49,7 @@ namespace MandelBrot
         public static readonly double[] sunsetStops = new double[] { 0.0, 0.15, 0.35, 0.60, 0.80, 1.0 };
 
         // Deep ocean gradient
-        public static readonly System.Drawing.Color[] oceanColors = new System.Drawing.Color[]
+        public static readonly Color[] oceanColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 0, 0, 20),      // 0.00 almost black
             System.Drawing.Color.FromArgb(255, 0, 30, 80),     // 0.10 navy
@@ -61,7 +61,7 @@ namespace MandelBrot
         public static readonly double[] oceanStops = new double[] { 0.0, 0.10, 0.35, 0.60, 0.85, 1.0 };
 
         // Forest canopy gradient
-        public static readonly System.Drawing.Color[] forestColors = new System.Drawing.Color[]
+        public static readonly Color[] forestColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 5, 20, 0),      // 0.00 almost black green
             System.Drawing.Color.FromArgb(255, 10, 70, 20),    // 0.10 deep green
@@ -73,7 +73,7 @@ namespace MandelBrot
         public static readonly double[] forestStops = new double[] { 0.0, 0.10, 0.35, 0.65, 0.90, 1.0 };
 
         // Neon cyber gradient
-        public static readonly System.Drawing.Color[] neonColors = new System.Drawing.Color[]
+        public static readonly Color[] neonColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 5, 0, 30),      // 0.00 dark violet
             System.Drawing.Color.FromArgb(255, 60, 0, 140),    // 0.20 electric indigo
@@ -84,7 +84,7 @@ namespace MandelBrot
         public static readonly double[] neonStops = new double[] { 0.0, 0.20, 0.45, 0.70, 1.0 };
 
         // Lava gradient
-        public static readonly System.Drawing.Color[] lavaColors = new System.Drawing.Color[]
+        public static readonly Color[] lavaColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 5, 0, 0),       // 0.00 black-red
             System.Drawing.Color.FromArgb(255, 80, 0, 0),      // 0.10 dark maroon
@@ -96,7 +96,7 @@ namespace MandelBrot
         public static readonly double[] lavaStops = new double[] { 0.0, 0.10, 0.35, 0.60, 0.85, 1.0 };
 
         // Pastel sunrise gradient
-        public static readonly System.Drawing.Color[] pastelColors = new System.Drawing.Color[]
+        public static readonly Color[] pastelColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 250, 240, 255), // 0.00 lavender
             System.Drawing.Color.FromArgb(255, 240, 220, 255), // 0.20 pale mauve
@@ -107,7 +107,7 @@ namespace MandelBrot
         public static readonly double[] pastelStops = new double[] { 0.0, 0.20, 0.45, 0.70, 1.0 };
 
         // Galaxy gradient with deep space hues
-        public static readonly System.Drawing.Color[] galaxyColors = new System.Drawing.Color[]
+        public static readonly Color[] galaxyColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 0, 0, 15),      // 0.00 space black
             System.Drawing.Color.FromArgb(255, 20, 10, 70),    // 0.12 deep purple
@@ -118,7 +118,7 @@ namespace MandelBrot
         public static readonly double[] galaxyStops = new double[] { 0.0, 0.12, 0.30, 0.60, 1.0 };
 
         // Earth gradient
-        public static readonly System.Drawing.Color[] earthColors = new System.Drawing.Color[]
+        public static readonly Color[] earthColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 2, 20, 60),    // 0.00 deep ocean
             System.Drawing.Color.FromArgb(255, 0, 90, 140),   // 0.12 coastal blue
@@ -130,7 +130,7 @@ namespace MandelBrot
         public static readonly double[] earthStops = new double[] { 0.0, 0.12, 0.30, 0.55, 0.78, 1.0 };
 
         // Sky gradient
-        public static readonly System.Drawing.Color[] skyColors = new System.Drawing.Color[]
+        public static readonly Color[] skyColors = new   Color[]
         {
             System.Drawing.Color.FromArgb(255, 3, 8, 30),     // 0.00 midnight
             System.Drawing.Color.FromArgb(255, 20, 40, 90),   // 0.18 twilight
@@ -141,7 +141,7 @@ namespace MandelBrot
         public static readonly double[] skyStops = new double[] { 0.0, 0.18, 0.45, 0.75, 1.0 };
 
         // My favorite
-        public static readonly System.Drawing.Color[] favoriteColors = new System.Drawing.Color[]
+        public static readonly Color[] favoriteColors = new Color[]
         {
             System.Drawing.Color.FromArgb(255, 0, 0, 0),    
             System.Drawing.Color.FromArgb(255, 255, 204, 0),  
@@ -152,7 +152,7 @@ namespace MandelBrot
         };
         public static readonly double[] favoriteStops = new double[] { 0.0, 0.16666, 0.3333333, 0.66666666, 0.8333333, 1.0 };
 
-        public static readonly System.Drawing.Color[] redBlackWoodColors = new Color[]
+        public static readonly Color[] redBlackWoodColors = new Color[]
         {
             Color.FromArgb(255, 8, 6, 5),       // 0.00 very dark (near-black warm)
             Color.FromArgb(255, 32, 8, 6),      // 0.10 charred wood undertone

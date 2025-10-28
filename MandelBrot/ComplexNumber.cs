@@ -65,5 +65,9 @@ namespace MandelBrot
                 cachedTheta = Math.Atan2(imaginary, real);
             return cachedTheta.Value;
         }
+        override public String ToString()
+        {
+            return "{ " + Math.Round(real, 10) + " | " + Math.Round(imaginary, 10) + "i }";
+        }
     }
 }
