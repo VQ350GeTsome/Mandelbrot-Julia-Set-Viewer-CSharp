@@ -7,7 +7,7 @@
   <tr>
     <td>
 			<strong>An Electric Babybrot:</strong></br>
-			<em>{ Mandel , center = (-1.25126, 0.40389i) , 3125x , n = 2.00 }</em>
+			<em>{ Mandel , center = (-1.25126, 0.4039i) , 3125x , n = 2.00 }</em>
 			<img src="Github/Electric%20Babybrot.png" width="400"/>
 		</td>
     <td>
@@ -24,7 +24,7 @@
 		</td>
     <td>
 			<strong>A Mandel Archipelago</strong></br>
-			<em>{ Mandel , center = ( -0.91964, 0.00i) , 5x , n = 3.75 }</em>
+			<em>{ Mandel , center = ( -0.9196, 0.00i) , 5x , n = 3.75 }</em>
 			<img src="Github/Some%20Odd%20Powered%20Mandelbrot%20Islands.png" width="400"/>
 		</td> 
   </tr>
@@ -37,7 +37,7 @@
 		<td>
 			<strong>A Vibrant Julia Set</strong></br>
 			<em>{ Julia , center = (-0.229, 0.741i) , c = (-0.8528, 0.0234i) , 25x , n = 10.0 }</em>
-			<img src="Github/Crazy20%Julia%20Set.png" width="400"/>
+			<img src="Github/Crazy%20Julia%20Set.png" width="400"/>
 		</td>
 	</tr>
 	<tr>
@@ -49,18 +49,18 @@
 		<td>
 			<strong>A Crystaline Julia Set</strong></br>
 			<em>{ Julia , center = (1.0i, -0.10i) , c = (-0.134, 0.039i) , 3.75x , n = 4/3 }</em>
-			<img src="Github/Sub%202%20Power%20Julia%20Set%20Zoom%20In.png" width="400"/>
+			<img src="Github/Sub%202%20Power%20Julia%20Set.png" width="400"/>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<strong>Super High n Julia Set Spiral</strong></br>
-			<em>{ Julia , center = (0.69184, 0.53712i) , c = (-0.05732 , 0.89796i) , 25x , n = 25 }</em>
-			<img src="Github/25th20%Power20%Julia20%Spiral.png" width="400"/>
+			<em>{ Julia , center = (0.69184, 0.53712i) , </br> c = (-0.05732 , 0.89796i) , 25x , n = 25.0 }</em>
+			<img src="Github/25th%20Power%20Julia%20Spiral.png" width="400"/>
 		</td>
 		<td>
 			<strong>A Sixth Power Babybrot</strong></br>
-			<em>{ Mandel , center = (0.38536, 0.27691i) , 24414000x , n = 6 }</em>
+			<em>{ Mandel , center = (0.38536, 0.27691i) , 24414000x , n = 6.00 }</em>
 			<img src="Github/Sixth%20Power%20Babybrot.png" width="400"/>
 		</td>
 	</tr>
