@@ -24,8 +24,8 @@ namespace MandelBrot
         //Returns a complex number that is this^n
         public static ComplexNumber pow(ComplexNumber o, double n) 
         {
-            double r = o.getMagnitude();  // Cached
-            double theta = o.getAngle();  // Cached
+            double r = o.getMagnitude();  //Cached
+            double theta = o.getAngle();  //Cached
 
             double newR = Math.Pow(r, n);
             double newTheta = theta * n;
@@ -40,7 +40,7 @@ namespace MandelBrot
         {
             return new ComplexNumber(real + other.getReal(), imaginary + other.getImaginary());
         }
-        //Returns the distance from (0 + 0i)
+        //Returns the distance from (0 + 0i) (the orgin)
         public double getDist() { return Math.Sqrt(real * real + imaginary * imaginary); }
         //Returns the square of the distance so we dont have to use sqrt
         public double getDistSqr() { return real * real + imaginary * imaginary; }

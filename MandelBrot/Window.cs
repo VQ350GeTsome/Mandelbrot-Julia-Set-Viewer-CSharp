@@ -2,6 +2,7 @@ using System.CodeDom;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace MandelBrot
 {
@@ -32,11 +33,11 @@ namespace MandelBrot
             iterations = 1000;                                                //How many iterations we will do
             paletteSize = 33;
             gradient = new GradientColor(); 
-            gradient.setColors(Gradients.favoriteColors, Gradients.favoriteStops);   //Initiate the gradient, picked from Gradients
+            gradient.setColors(Gradients.redBlackWoodColors, Gradients.redBlackWoodStops);   //Initiate the gradient, picked from Gradients
             gradient.generatePalette(paletteSize);                           //Calculate the gradient
             zoom = 1.0;                                                      //Initiate the 'camera' zoom
             zoomChange = 5.0;                                                //Initiate how much to zoom in by
-            powChange = 0.01;                                                //Initiate how much to exponentiate z by
+            powChange = 0.1;                                                //Initiate how much to exponentiate z by
             center = new ComplexNumber(-0.5, 0);                             //Initiate center of 'camera'
             MandelMath.setWidthHeight(width, height);
 
@@ -152,10 +153,10 @@ namespace MandelBrot
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    MandelMath.changePower(0.01); regen(); printData(); break;
+                    MandelMath.changePower( powChange ); regen(); printData(); break;
 
                 case Keys.S:
-                    MandelMath.changePower(-0.01); regen(); printData(); break;
+                    MandelMath.changePower(-powChange ); regen(); printData(); break;
 
                 case Keys.J:
                     Point screenPos1 = Cursor.Position, clientPos1 = this.PointToClient(screenPos1); //Gets the current mouses position
@@ -176,7 +177,7 @@ namespace MandelBrot
                     mandel = true; regen(); printData(); break;
 
                 case Keys.O:
-                    Point screenPos2 = Cursor.Position, clientPos2 = this.PointToClient(screenPos2); //Gets the current mouses position
+                    Point screenPos2 = Cursor.Position, clientPos2 = this.PointToClient(screenPos2); //Gets the current mouse position
                     int x2 = Math.Max(Math.Min(clientPos2.X, width), 0);
                     int y2 = Math.Max(Math.Min(clientPos2.Y, height), 0);
 
@@ -185,6 +186,10 @@ namespace MandelBrot
                     iterations += 10; regen(); printData(); break;
                 case Keys.A:
                     iterations -= 10; regen(); printData(); break;
+                case Keys.P:
+                    String confirm = ScreenShotter.SaveBitmapAsPng(canvas); //Pass in the canvas and the number
+                    MessageBox.Show(confirm);
+                    break;
             }
         }
         #endregion

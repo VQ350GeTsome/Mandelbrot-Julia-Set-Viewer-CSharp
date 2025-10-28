@@ -151,5 +151,16 @@ namespace MandelBrot
             System.Drawing.Color.FromArgb(255, 0, 0, 0)
         };
         public static readonly double[] favoriteStops = new double[] { 0.0, 0.16666, 0.3333333, 0.66666666, 0.8333333, 1.0 };
+
+        public static readonly System.Drawing.Color[] redBlackWoodColors = new Color[]
+        {
+            Color.FromArgb(255, 8, 6, 5),       // 0.00 very dark (near-black warm)
+            Color.FromArgb(255, 32, 8, 6),      // 0.10 charred wood undertone
+            Color.FromArgb(255, 90, 24, 12),    // 0.25 deep burnt brown
+            Color.FromArgb(255, 150, 40, 18),   // 0.45 warm mahogany
+            Color.FromArgb(255, 210, 70, 20),   // 0.70 vivid red-wood
+            Color.FromArgb(255, 255, 100, 40)   // 1.00 hot red highlight
+        };
+        public static readonly double[] redBlackWoodStops = new double[] { 0.00, 0.10, 0.25, 0.45, 0.70, 1.00 };
     }
 }
