@@ -5,24 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MandelBrot
+namespace MandelBrot.Gradients
 {
     internal class GradientColor
     {
         private Color[] palette = Array.Empty<Color>();
 
-        public void generatePalette(int maxIterations)
+        public void generatePalette(int size)
         {
-            if (maxIterations <= 0 || colors.Length == 0 || locations.Length == 0 || colors.Length != locations.Length)
+            if (size <= 0 || colors.Length == 0 || locations.Length == 0 || colors.Length != locations.Length)
             {
                 palette = new Color[1] { Color.Black };
                 return;
             }
 
-            palette = new Color[maxIterations + 1];
-            for (int i = 0; i <= maxIterations; i++)
+            palette = new Color[size + 1];
+            for (int i = 0; i <= size; i++)
             {
-                double percent = (double)i / maxIterations;
+                double percent = (double) i / size;
                 palette[i] = getInterpolatedColor(percent);
             }
         }
@@ -32,7 +32,7 @@ namespace MandelBrot
             if (palette == null || palette.Length == 0)
                 return Color.Black;
 
-            int idx = ((iteration % palette.Length) + palette.Length) % palette.Length;
+            int idx = (iteration % palette.Length + palette.Length) % palette.Length;
 
             return palette[idx];
         }
@@ -66,7 +66,7 @@ namespace MandelBrot
 
                 if (percent >= left && percent <= right)
                 {
-                    double w = (right - left) == 0.0 ? 0.0 : (percent - left) / (right - left);
+                    double w = right - left == 0.0 ? 0.0 : (percent - left) / (right - left);
                     return blendColor(colors[i - 1], colors[i], w);
                 }
             }

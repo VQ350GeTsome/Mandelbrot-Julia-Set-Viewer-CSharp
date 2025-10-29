@@ -10,44 +10,55 @@ namespace MandelBrot
 {
     internal class MandelMath
     {
-        private static double epsilon = 0.000000001,
-            power = 25; //What to exponentiate Z by (Z = Z^(power) + C)
+        private static double epsilon = 0.000000001;
+        private static int iterations = 1000; //1000 is good enough for doubles
                 
         private static int width, height;
 
         //Sets width and height
-        public static void setWidthHeight(int w, int h) { width = w; height = h; }
-        //Sets iterations
-        public static void setMaxIterations(int maxIterations) { maxIterations = maxIterations; }
-        //Using c & z we calculate if it's bounded, -1 = bounded, else equals the amount of iterations before it was deemed unbounded
-        public static int mandelCalc(ComplexNumber z, ComplexNumber c, int iterations)
+        public static void SetWidthHeight(int w, int h) { width = w; height = h; }
+        //Using c, z & n we calculate if it's bounded, -1 = bounded, else equals the amount of iterations before it was deemed unbounded
+        public static int MandelCalc(ComplexNumber z, ComplexNumber c, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = ComplexNumber.pow(z, power).add(c);   //Mutate z
-                dist = z.getDistSqr();                    //Gets the distance from the orgin
-                if (dist > 4) { return i; }               //If z is deemed unbounded (>2) return i
-                if (dist < epsilon) { return -1; }        //If z is at the orgin return -1
+                z = z.Pow(n).Add(c);                            //Mutate z
+                dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
+                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist < epsilon) { return -1; }              //If z is at the orgin return -1
             }
             return -1; 
         }
+        //Using c, z & n we do the same thing as MandelCalc but take the absoulte value of z before raising it to n and adding c
+        public static int BurningShipCalc(ComplexNumber z, ComplexNumber c, double n)
+        {
+            double dist = 0;
+            for (int i = 0; i < iterations; i++)
+            {
+                z = z.Abs().Pow(n).Add(c);                      //Mutate z
+                dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
+                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist < epsilon) { return -1; }              //If z is at the orgin return -1
+            }
+            return -1;
+        }
         //Returns an array of points that is the orbit
-        public static Point[] mandelOrbit(ComplexNumber z, ComplexNumber c, int iterations, double zoom, double centerReal, double centerImag)
+        public static Point[] MandelOrbit(ComplexNumber z, ComplexNumber c, double n, double zoom, double centerReal, double centerImag)
         {
             double dist = 0;
             Point[] points = new Point[iterations];
             for (int i = 0; i < iterations; i++)
             {
-                z = ComplexNumber.pow(z, power).add(c);        //Mutate z
-                dist = z.getDistSqr();                         //Gets the distance from the orgin
-                points[i] = getXYfromC(z, zoom, centerReal, centerImag); 
-                if (dist > 4) { return points; }               //If z is deemed unbounded (>2) return the points array
-                if (dist < epsilon) { return points; }         //If z is at the orgin return the point array
+                z.Pow(n).Add(c);                                //Mutate z
+                dist = z.GetDistSqr();                          //Gets the distance from the orgin
+                points[i] = GetXYfromC(z, zoom, centerReal, centerImag); 
+                if (dist > 4) { return points; }                //If z is deemed unbounded (>2) return the points array
+                if (dist < epsilon) { return points; }          //If z is at the orgin return the point array
             }
             return points;
         }
-        public static ComplexNumber getC(int x, int y, double zoom, double centerReal, double centerImag)
+        public static ComplexNumber GetC(int x, int y, double zoom, double centerReal, double centerImag)
         {
             double aspectRatio = (double)height / width;
 
@@ -64,7 +75,7 @@ namespace MandelBrot
 
             return new ComplexNumber(real, imag);
         }
-        public static Point getXYfromC(ComplexNumber c, double zoom, double centerReal, double centerImag)
+        public static Point GetXYfromC(ComplexNumber c, double zoom, double centerReal, double centerImag)
         {
             double aspectRatio = (double)height / width;
 
@@ -76,12 +87,10 @@ namespace MandelBrot
             double imagMin = centerImag - viewHeight / 2;
             double imagMax = centerImag + viewHeight / 2;
 
-            double x = ((c.getReal() - realMin) / (realMax - realMin)) * width;
-            double y = ((imagMax - c.getImaginary()) / (imagMax - imagMin)) * height;
+            double x = ((c.GetReal() - realMin) / (realMax - realMin)) * width;
+            double y = ((imagMax - c.GetImaginary()) / (imagMax - imagMin)) * height;
 
             return new Point((int)x, (int)y);
         }
-        public static void changePower(double delta) { power += delta; power = (power < 1) ? 1 : power; }
-        public static double getPower() { return Math.Round(power, 8); }
     }
 }
