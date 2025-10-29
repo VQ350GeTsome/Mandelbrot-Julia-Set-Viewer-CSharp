@@ -17,8 +17,9 @@ namespace MandelBrot
 
         bool julia;
 
-        private ComplexNumber center = new ComplexNumber(-0.50, 0.00),    //Center of the screen
-                              juliaC = new ComplexNumber();
+        private ComplexNumber center    = new ComplexNumber(-0.50, 0.00),    //Center of the screen
+                              juliaC    = new(),
+                              phoenixP  = new(0.25, 0.00);
 
         public FractalManager(int w, int h, bool j = false) 
         {
@@ -47,6 +48,9 @@ namespace MandelBrot
         public ComplexNumber GetJuliaC() { return juliaC; }
         public void SetJuliaC(ComplexNumber c) { juliaC = c; }
 
+        public ComplexNumber GetPhoenixP() { return phoenixP; }
+        public void SetPhoenixP(ComplexNumber p) { phoenixP = p; }
+
         public void Update(String type)
         {
             Parallel.For(0, width, x =>
@@ -59,13 +63,13 @@ namespace MandelBrot
                         c = (!julia) ? currentPoint : juliaC;   //If julia is false C is the current point, else it's the C we picked for the julia set (juliaC)
                     switch (type)
                     {
-                        case "mandel":          screen[x, y] = MandelMath.MandelCalc(z, c, n); break;
+                        case "mandel":          screen[x, y] = MandelMath.MandelCalc(z, c, n);  break;
                         case "burningship":     screen[x, height - y - 1] //Flip the y values so the fractal looks better
-                                                    = MandelMath.BurningShipCalc(z, c, n); break;
+                                                    = MandelMath.BurningShipCalc(z, c, n);      break;
                         case "tricorn":         screen[x, y] = MandelMath.TricornCalc(z, c, n); break;
-                        case "celtic":          screen[x, y] = MandelMath.CelticCalc(z, c, n); break;
-
-                        //lambda
+                        case "celtic":          screen[x, y] = MandelMath.CelticCalc(z, c, n);  break;
+                        case "lambda":          screen[x, y] = MandelMath.LambdaCalc(z, c, n);  break;
+                        case "phoenix":         screen[x, y] = MandelMath.PhoenixCalc(z, c, n, phoenixP); break;
                         //http://usefuljs.net/fractals/docs/mandelvariants.html
 
                         default: MessageBox.Show(type + " not a valid fractal type."); break;

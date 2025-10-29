@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace MandelBrot
 {
@@ -79,6 +80,21 @@ namespace MandelBrot
         public ComplexNumber Conjugate()
         {
             return new ComplexNumber(real, -imaginary);
+        }
+        //Multiplies this number with another
+        public ComplexNumber Multiply(ComplexNumber o)
+        {
+            double real = (this.real * o.GetReal()) - (this.imaginary * o.imaginary);
+            double imag = (this.real * o.GetImaginary()) + (this.imaginary * o.GetReal());
+            return new ComplexNumber(real, imag);
+        }
+        public ComplexNumber AddReal(double r)
+        {
+            return new ComplexNumber(real + r, imaginary);
+        }
+        public ComplexNumber SubtractReal(double r)
+        {
+            return new ComplexNumber(real - r, imaginary);
         }
         
 

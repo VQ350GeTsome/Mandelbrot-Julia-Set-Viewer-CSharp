@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Packaging;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -71,6 +72,35 @@ namespace MandelBrot
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
+            }
+            return -1;
+        }
+
+        public static int LambdaCalc(ComplexNumber z, ComplexNumber l, double n)
+        {
+            double dist = 0;
+            for (int i = 0; i < iterations; i++)
+            {
+                z = l.Multiply(z.Multiply(z.SubtractReal(-1))); //Lambda fractal is z = l * z(1 - z)
+                dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
+                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist < epsilon) { return -1; }              //If z is at ts
+            }
+            return -1;
+        }
+        public static int PhoenixCalc(ComplexNumber z, ComplexNumber c, double n, ComplexNumber p)
+        {
+            double dist = 0;
+            ComplexNumber z_n1 = new(0, 0); // z_{n-1}
+            for (int i = 0; i < iterations; i++)
+            {
+                ComplexNumber z_1 = z.Pow(n).Add(c).Add(p.Multiply(z_n1));
+                dist = z_1.GetDistSqr();
+                if (dist > 4) { return i; }
+                if (dist < epsilon) { return -1; }
+
+                z_n1 = z;
+                z = z_1;
             }
             return -1;
         }

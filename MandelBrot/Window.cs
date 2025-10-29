@@ -30,8 +30,9 @@ namespace MandelBrot
 
         private String[] options =
         {
-            "Type: " , "Center (r, i):" , "Zoom", "n: ",
-            "What C for Julia?:" , "Julia Center:" , "Julia Zoom"
+            "Type: " , "Center (r, i): " , "Zoom: ", "n: ",
+            "What C for Julia?: " , "Julia Center: " , "Julia Zoom: ",
+            "Phoenix P: "
         },
             settings =
         {
@@ -107,11 +108,11 @@ namespace MandelBrot
         //Returns a string of information on the current window
         private String getInformation()
         {
-            String juliaC = "";
-            if (type.ToLower().Equals("mandel")) 
+            String phoenP = ""; //Additional information if it's the phoenix fractal
+            if (type.ToLower().Equals("phoenix")) 
             {
-                juliaC = fctlMgr.GetJuliaC().ToString();
-                juliaC = "Julia C: " + juliaC;
+                phoenP = fctlMgr.GetPhoenixP().ToString();
+                phoenP = "Phoenix C: " + phoenP;
             }
 
             return "Type?\t"            + type                  + "\n"
@@ -120,19 +121,22 @@ namespace MandelBrot
                     + "n:\t"            + fctlMgr.GetN()        + "\n"
                     + "Julia C:\t"      + jliaMgr.GetJuliaC()   + "\n"
                     + "Julia Center:\t" + jliaMgr.GetCenter()   + "\n"
-                    + "Julia Zoom:\t"   + jliaMgr.GetZoom();
+                    + "Julia Zoom:\t"   + jliaMgr.GetZoom()     + "\n"
+                    + phoenP + "\n";
+                
         }
         private String[] getInformationArray()
         {
-            String[] arr = new String[7];
+            String[] arr = new String[8];
 
             arr[0] = type;
-            arr[1] = fctlMgr.GetCenter().ToStringParen();
-            arr[2] = fctlMgr.GetZoom()  .ToString();
-            arr[3] = fctlMgr.GetN()     .ToString();
-            arr[4] = jliaMgr.GetJuliaC().ToStringParen();
-            arr[5] = jliaMgr.GetCenter().ToStringParen();
-            arr[6] = jliaMgr.GetZoom()  .ToString();
+            arr[1] = fctlMgr.GetCenter()    .ToStringParen();
+            arr[2] = fctlMgr.GetZoom()      .ToString();
+            arr[3] = fctlMgr.GetN()         .ToString();
+            arr[4] = jliaMgr.GetJuliaC()    .ToStringParen();
+            arr[5] = jliaMgr.GetCenter()    .ToStringParen();
+            arr[6] = jliaMgr.GetZoom()      .ToString();
+            arr[7] = fctlMgr.GetPhoenixP()  .ToStringParen();
 
             return arr;
         }
@@ -288,11 +292,13 @@ Keyboard:
          *   T: Go to Tricorn space
          *   C: Go to Celtic space
          *   L: Go to Lambda space
+         *   N: Go to Phoenix space
          *  
          *  O: Print Orbit =====Doesn't work right now=======
          *  
          *  P: Printscreen (screenshot) [.png]
          *  0: Input custom coords & settings
+         *  I: Input custom render settings
          *  Zoom Defaults:
          *   1: Reset zoom & center to 1.00 (-0.50,  0.00i) Good for the entire Mandelbrot for lower n
          *   2: Reset zoom & center to 0.90 ( 0.00,  0.00i) Good for Julia sets and higer n Mandelbrots
@@ -380,6 +386,8 @@ Keyboard:
                 case Keys.B: type = "burningship";  regen(); printData(); break;
                 case Keys.T: type = "tricorn";      regen(); printData(); break;
                 case Keys.C: type = "celtic";       regen(); printData(); break;
+                case Keys.L: type = "lambda";       regen(); printData(); break;
+                case Keys.N: type = "phoenix";      regen(); printData(); break;
 
                 case Keys.E:
                     String[] defaults =
@@ -422,6 +430,9 @@ Keyboard:
 
                         fctlMgr.SetN(Double.Parse(inputs[3]));
                         jliaMgr.SetN(Double.Parse(inputs[3]));
+
+                        fctlMgr.GetPhoenixP().Parse(inputs[7]);
+                        jliaMgr.GetPhoenixP().Parse(inputs[7]);
 
                         regen(); printData();
                     }
