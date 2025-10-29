@@ -15,13 +15,16 @@ namespace MandelBrot
                           n = 2.00;
         private int[,] screen;
 
+        bool julia;
+
         private ComplexNumber center = new ComplexNumber(-0.50, 0.00),    //Center of the screen
                               juliaC = new ComplexNumber();
 
-        public FractalManager(int w, int h) 
+        public FractalManager(int w, int h, bool j = false) 
         {
             width = w; height = h;
             screen = new int[width, height];    //Initalize screen
+            julia = j;
         }
 
         //Returns the currect screen
@@ -44,46 +47,31 @@ namespace MandelBrot
         public ComplexNumber GetJuliaC() { return juliaC; }
         public void SetJuliaC(ComplexNumber c) { juliaC = c; }
 
-        #region Updaters
-
-        //Fills the screen with escape times for the current Mandelbrot
-        public void UpdateMandelBrot()
+        public void Update(String type)
         {
             Parallel.For(0, width, x =>
             {
                 for (int y = 0; y < height; y++) //Loop over entire window
                 {
-                    ComplexNumber currentPoint = MandelMath.GetC(x, y, zoom, center.GetReal(), center.GetImaginary()), z = new(); //Calculate the currentPoint given the (x, y) coordinates
-                    screen[x, y] = MandelMath.MandelCalc(z, currentPoint, n);                   //Calculate q to determine if currentPoint is in the set (-1) or not in the set        
-                }
-            });
-        }
-        //Fills the screen with escape times for the current Julia
-        public void UpdateJuliaSet()
-        {
-            Parallel.For(0, width, x =>
-            {
-                for (int y = 0; y < height; y++) //Loop over entire window
-                {
-                    ComplexNumber currentPoint = MandelMath.GetC(x, y, zoom, center.GetReal(), center.GetImaginary());
-                    screen[x, y] = MandelMath.MandelCalc(currentPoint, juliaC, n);
-                }
-            });
-        }
-        //Fills the screen with escape times for the current Burning Ship
-        public void UpdateBurningShip()
-        {
-            Parallel.For(0, width, x =>
-            {
-                for (int y = 0; y < height; y++) //Loop over entire window
-                {
-                    ComplexNumber currentPoint = MandelMath.GetC(x, y, zoom, center.GetReal(), center.GetImaginary()), z = new();
-                    screen[x, height - y - 1] = MandelMath.BurningShipCalc(z, currentPoint, n);
-                }
-            });
-        }
+                    ComplexNumber currentPoint = MandelMath.GetC(x, y, zoom, center.GetReal(), center.GetImaginary()), //Calculate the currentPoint given the (x, y) coordinates
 
-        #endregion
+                        z = (!julia) ? new() : currentPoint,    //If julia is false Z is a new complex number, else it's the current point
+                        c = (!julia) ? currentPoint : juliaC;   //If julia is false C is the current point, else it's the C we picked for the julia set (juliaC)
+                    switch (type)
+                    {
+                        case "mandel":          screen[x, y] = MandelMath.MandelCalc(z, c, n); break;
+                        case "burningship":     screen[x, height - y - 1] //Flip the y values so the fractal looks better
+                                                    = MandelMath.BurningShipCalc(z, c, n); break;
+                        case "tricorn":         screen[x, y] = MandelMath.TricornCalc(z, c, n); break;
+                        case "celtic":          screen[x, y] = MandelMath.CelticCalc(z, c, n); break;
 
+                        //lambda
+                        //http://usefuljs.net/fractals/docs/mandelvariants.html
+
+                        default: MessageBox.Show(type + " not a valid fractal type."); break;
+                    }   
+                }
+            });
+        }
     }
 }

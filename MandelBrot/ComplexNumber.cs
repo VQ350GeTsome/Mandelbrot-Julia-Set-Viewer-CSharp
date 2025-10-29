@@ -46,6 +46,11 @@ namespace MandelBrot
         {
             return new ComplexNumber(real + other.GetReal(), imaginary + other.GetImaginary());
         }
+        //Subtracts two complex numbers
+        public ComplexNumber Subtract(ComplexNumber o)
+        {
+            return new ComplexNumber(real - o.GetReal(), imaginary - o.GetImaginary());
+        }
         //Raises the complex number to the nth power
         public ComplexNumber Pow(double n)
         {
@@ -70,10 +75,12 @@ namespace MandelBrot
         {
             return new ComplexNumber(Math.Abs(real), Math.Abs(imaginary));
         }
-        public ComplexNumber Subtract(ComplexNumber o)
+        //Returns the conjugate of this complex number
+        public ComplexNumber Conjugate()
         {
-            return new ComplexNumber(real - o.GetReal(), imaginary - o.GetImaginary());
+            return new ComplexNumber(real, -imaginary);
         }
+        
 
         #endregion
 

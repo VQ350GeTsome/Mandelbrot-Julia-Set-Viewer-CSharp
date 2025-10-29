@@ -38,7 +38,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 1000);
+            ClientSize = new Size(2000, 1000);
             Name = "MandelBrot";
             Text = "MandelBrot";
             ResumeLayout(false);
