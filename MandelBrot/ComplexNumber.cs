@@ -15,6 +15,11 @@ namespace MandelBrot
         public ComplexNumber(double r, double i) { real = r; imaginary = i; }
         public ComplexNumber() { }
 
+        public bool equals(ComplexNumber o)
+        {
+            return real == o.real && imaginary == o.imaginary;
+        }
+
         #region static operations
 
         //Multiplies this complex number with another (other)

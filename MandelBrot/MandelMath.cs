@@ -11,7 +11,7 @@ namespace MandelBrot
 {
     internal class MandelMath
     {
-        private static double epsilon = 0.000000001;
+        private static double epsilon = 0.000001;
         private static int iterations = 200; //1000 is good enough for doubles
                 
         private static int width, height;
@@ -22,46 +22,46 @@ namespace MandelBrot
         #region fractals
 
         //Using c, z & n we calculate if it's bounded, -1 = bounded, else equals the amount of iterations before it was deemed unbounded
-        public static int MandelCalc(ComplexNumber z, ComplexNumber c, double n)
+        public static double MandelCalc(ComplexNumber z, ComplexNumber c, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
                 z = z.Pow(n).Add(c);                            //Mandelbrot is z = z^n + c ... the simplest of them all
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
-                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at the orgin return -1
             }
             return -1; 
         }
         //Using c, z & n we do the same thing as MandelCalc but we change the formula a bit so it's the burning ship set
-        public static int BurningShipCalc(ComplexNumber z, ComplexNumber c, double n)
+        public static double BurningShipCalc(ComplexNumber z, ComplexNumber c, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
                 z = z.Abs().Pow(n).Add(c);                      //The burning ship is z = (|real(z)| + |imag(z)|)^n + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
-                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
             }
             return -1;
         }
         //Just like the other methods, we return the iteration count or -1 if it's in the set for the tricorn set
-        public static int TricornCalc(ComplexNumber z, ComplexNumber c, double n)
+        public static double TricornCalc(ComplexNumber z, ComplexNumber c, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
                 z = z.Conjugate().Pow(n).Add(c);                //The Tricorn fractal is z = conjugate(z)^n + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
-                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
             }
             return -1;
         }
 
-        public static int CelticCalc(ComplexNumber z, ComplexNumber c, double n)
+        public static double CelticCalc(ComplexNumber z, ComplexNumber c, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
@@ -70,25 +70,25 @@ namespace MandelBrot
                 z = new ComplexNumber(Math.Abs(z.GetReal()), z.GetImaginary());
                 z = z.Add(c);                                   //The Celtic fractal is z = (real(|z^2|) + imag(z^2)) + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
-                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
             }
             return -1;
         }
 
-        public static int LambdaCalc(ComplexNumber z, ComplexNumber l, double n)
+        public static double LambdaCalc(ComplexNumber z, ComplexNumber l, double n)
         {
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
                 z = l.Multiply(z.Multiply(z.SubtractReal(-1))); //Lambda fractal is z = l * z(1 - z)
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
-                if (dist > 4) { return i; }                     //If z is deemed unbounded (>4) return i
+                if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
             }
             return -1;
         }
-        public static int PhoenixCalc(ComplexNumber z, ComplexNumber c, double n, ComplexNumber p)
+        public static double PhoenixCalc(ComplexNumber z, ComplexNumber c, double n, ComplexNumber p)
         {
             double dist = 0;
             ComplexNumber z_n1 = new(0, 0); // z_{n-1}
@@ -96,7 +96,7 @@ namespace MandelBrot
             {
                 ComplexNumber z_1 = z.Pow(n).Add(c).Add(p.Multiply(z_n1));
                 dist = z_1.GetDistSqr();
-                if (dist > 4) { return i; }
+                if (dist > 4) { return GetValue(i, z_1); }
                 if (dist < epsilon) { return -1; }
 
                 z_n1 = z;
@@ -121,6 +121,11 @@ namespace MandelBrot
                 if (dist < epsilon) { return points; }          //If z is at the orgin return the point array
             }
             return points;
+        }
+
+        private static double GetValue(int i, ComplexNumber z)
+        {
+            return ColorMnH.GetNewValue(i, z);
         }
 
         #region Complex Number <-> (x, y) translators

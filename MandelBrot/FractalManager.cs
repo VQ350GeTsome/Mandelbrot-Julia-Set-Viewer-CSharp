@@ -13,23 +13,31 @@ namespace MandelBrot
 
         private double zoom = 1.00,
                           n = 2.00;
-        private int[,] screen;
+        private double[,] screen;
 
         bool julia;
 
         private ComplexNumber center    = new ComplexNumber(-0.50, 0.00),    //Center of the screen
                               juliaC    = new(),
-                              phoenixP  = new(0.25, 0.00);
+                              phoenixP  = new(-.5, 0);
 
         public FractalManager(int w, int h, bool j = false) 
         {
             width = w; height = h;
-            screen = new int[width, height];    //Initalize screen
+            screen = new double[width, height];    //Initalize screen
             julia = j;
         }
 
-        //Returns the currect screen
-        public int[,] GetScreen() { return screen; }
+        /// <summary>
+        /// Returns the screen, a 2d array full of escape iterations 
+        /// for the last fractal that was updated. So if point [10, 12]
+        /// takes 7 iterations to diverge, that's what will be stored
+        /// in that location in the retured array.
+        /// </summary>
+        /// <returns>
+        /// The 2d array stored in the fractal manager
+        /// </returns>
+        public double[,] GetScreen() { return screen; }
 
         //Returns the current zoom amount
         public double GetZoom() { return zoom; }

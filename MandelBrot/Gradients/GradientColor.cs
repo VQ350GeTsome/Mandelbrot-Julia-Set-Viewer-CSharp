@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MandelBrot.Gradients
 {
-    internal class GradientColor
+    public class GradientColor
     {
         private Color[] palette = Array.Empty<Color>();
 
@@ -27,14 +27,14 @@ namespace MandelBrot.Gradients
             }
         }
 
-        public Color getColor(int iteration)
+        public Color getColor(double iteration)
         {
             if (palette == null || palette.Length == 0)
                 return Color.Black;
 
-            int idx = (iteration % palette.Length + palette.Length) % palette.Length;
+            double idx = (iteration % palette.Length + palette.Length) % palette.Length;
 
-            return palette[idx];
+            return palette[(int) idx];
         }
 
         private Color[] colors = Array.Empty<Color>();
