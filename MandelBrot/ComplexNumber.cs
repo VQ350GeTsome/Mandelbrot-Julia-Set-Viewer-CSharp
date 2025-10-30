@@ -138,15 +138,15 @@ namespace MandelBrot
 
         #endregion
 
-        #region ToString(), Parse(String) methods
+        #region String methods
 
-        //Regular ToString : { r , i }
+        //Regular overrided ToString() returns for example: ( 1.24 , -0.12i )
         override public String ToString()
         {
-            return "{ " + Math.Round(real, 10) + " | " + Math.Round(imaginary, 10) + "i }";
+            return "( " + Math.Round(real, 10) + " , " + Math.Round(imaginary, 10) + "i )";
         }
-        //ToString Parenthesis verison : (r, i)
-        public String ToStringParen()
+        //ToString no i verision, returns for example: (1.24, -0.12i)
+        public String ToStringNoi()
         {
             return "(" + Math.Round(real, 10) + ", " + Math.Round(imaginary,10) + ")";
         }

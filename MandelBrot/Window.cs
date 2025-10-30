@@ -12,7 +12,8 @@ namespace MandelBrot
         private int width, height;
 
         public static int   paletteSize,
-                            paletteScrollDelta = 1;
+                            paletteScrollDelta = 1,
+                            ringSize = 1;
 
         private Gradients.GradientColor gradient;
 
@@ -24,7 +25,7 @@ namespace MandelBrot
         private int colorMethod = 0;
         private String[] colorMethods =
         {
-            "escapetime", "smoothescapetime", "rings"
+            "escapetime", "rings", "smoothescapetime"
         };
 
         private Color inSetColor = Color.Black;
@@ -74,15 +75,7 @@ namespace MandelBrot
 
         }
         
-        
-        //Regenerate screen using updated values
-        private void RegenBoth() { fctlMgr.Update(type); jliaMgr.Update(type); }
-        private void RegenMandel() { fctlMgr.Update(type); }
-        private void RegenJulia() { jliaMgr.Update(type); }
-        private void PrintOrbit(int x, int y)
-        {
-            
-        }
+        //Prints all the data to the screen using the current color method and gradient
         private void PrintData()
         {
             double q = 0;
@@ -92,7 +85,7 @@ namespace MandelBrot
             double[,] screen = fctlMgr.GetScreen();   //Get the right side screen
             if (colorMethods[colorMethod].Equals("rings"))
             {
-                screen = ColorMnH.RingsPostProcessing(screen);
+                screen = ColorMnH.RingsPostProcessing(screen, ringSize);
             }
             for (int x = 0; x < width / 2; x++) for (int y = 0; y < height; y++)    //Loop over it and print it to the screen
             {
@@ -105,7 +98,7 @@ namespace MandelBrot
             screen = jliaMgr.GetScreen();
             if (colorMethods[colorMethod].Equals("rings"))
             {
-                screen = ColorMnH.RingsPostProcessing(screen);
+                screen = ColorMnH.RingsPostProcessing(screen, ringSize);
             }
             for (int x = 0; x < width / 2; x++) for (int y = 0; y < height; y++)
                 {
@@ -114,7 +107,20 @@ namespace MandelBrot
                 }
             this.Invalidate();  //Redraw screen
         }
-        //Returns a string of information on the current window
+        //Regenerates both sides of the screen
+        private void RegenBoth() { fctlMgr.Update(type); jliaMgr.Update(type); }
+        //Regenerates the Mandel type side only
+        private void RegenMandel() { fctlMgr.Update(type); }
+        //Regenerates the Julia type side only
+        private void RegenJulia() { jliaMgr.Update(type); }
+        private void PrintOrbit(int x, int y)
+        {
+            
+        }
+
+        #region Information Helpers
+
+        //Returns a String with the current information readable by the user
         private String GetInformation()
         {
             String phoenP = ""; //Additional information if it's the phoenix fractal
@@ -134,18 +140,19 @@ namespace MandelBrot
                     + phoenP + "\n";
                 
         }
+        //Returns an array of String with the current information so it's readable by the program
         private String[] GetInformationArray()
         {
             String[] arr = new String[8];
 
             arr[0] = type;
-            arr[1] = fctlMgr.GetCenter()    .ToStringParen();
+            arr[1] = fctlMgr.GetCenter()    .ToStringNoi();
             arr[2] = fctlMgr.GetZoom()      .ToString();
             arr[3] = fctlMgr.GetN()         .ToString();
-            arr[4] = jliaMgr.GetJuliaC()    .ToStringParen();
-            arr[5] = jliaMgr.GetCenter()    .ToStringParen();
+            arr[4] = jliaMgr.GetJuliaC()    .ToStringNoi();
+            arr[5] = jliaMgr.GetCenter()    .ToStringNoi();
             arr[6] = jliaMgr.GetZoom()      .ToString();
-            arr[7] = fctlMgr.GetPhoenixP()  .ToStringParen();
+            arr[7] = fctlMgr.GetPhoenixP()  .ToStringNoi();
 
             return arr;
         }
@@ -255,8 +262,9 @@ Keyboard:
             return null;
         }
 
+        #endregion
 
-        #region MandelControls
+        #region Fractal Control Handlers
         /**
          * -------Controls--------
          * Mouse:
@@ -441,6 +449,7 @@ Keyboard:
             }
         }
         #endregion
+
         private void MainForm_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(canvas, 0, 0); // Draw the bitmap to the window

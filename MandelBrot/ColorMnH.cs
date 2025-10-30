@@ -48,18 +48,17 @@ namespace MandelBrot
             }
         }
 
-        public static double[,] RingsPostProcessing(double[,] image)
+        public static double[,] RingsPostProcessing(double[,] image, int size, int radius = 1)
         {
-            int radius = 1,
-                width  = image.GetLength(0),
+            int width  = image.GetLength(0),
                 height = image.GetLength(1);
 
             double[,] returnImage = new double[width, height];
 
-            for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)    //Loop the image
             {
                 if (   x >= radius && x + radius < width && 
-                       y >= radius && y + radius < height   )
+                       y >= radius && y + radius < height   )   //If the point is in the screen enough to have a radius
                 {
                         double  center = image[x, y],
                                 above  = image[x, y - 1],
@@ -76,7 +75,33 @@ namespace MandelBrot
                         }
                 }
             }
-            return returnImage;
+            return Blur(returnImage, size);
+        }
+
+        public static double[,] Blur(double[,] image, int radius = 5) 
+        {
+            int width  = image.GetLength(0),
+                height = image.GetLength(1);
+            double[,] blurred = new double[width, height];
+
+            for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)    //Loop the image
+            {
+                    double value    = 0;
+                    int count       = 0;
+                    for (int dx = -radius; dx <= radius; dx++) for (int dy = -radius; dy <= radius; dy++)
+                    {
+                        int nx = x + dx;
+                        int ny = y + dy;
+
+                        if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                        {
+                            value += image[nx, ny];
+                            count++;
+                        }
+                    }
+                    blurred[x, y] = value / 5.0;
+            }
+            return blurred; 
         }
     }
 }
