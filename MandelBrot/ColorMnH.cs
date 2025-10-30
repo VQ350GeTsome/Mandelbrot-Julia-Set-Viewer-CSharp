@@ -13,7 +13,7 @@ namespace MandelBrot
     /// </summary>
     public static class ColorMnH
     {
-        public static String type;
+        public static String type = "escapetime";
         public static void SetNewType(String t)
         {
             type = t.ToLower();
@@ -37,15 +37,18 @@ namespace MandelBrot
         {
             switch (type)
             {
-                case "escapetime": ;
-                    return i;                           
-                    break;
+                case "escapetime": return i; break;
                 case "smoothescapetime": 
                     return 10 * (i + 1 - Math.Log(Math.Log(z.GetDistSqr())) / Math.Log(2)); 
                     break;
+                case "rings": return i; 9break;
 
                 default: return i; break;
             }
+        }
+        public static double GetNewValue(ComplexNumber z)
+        {
+            return z.GetDistSqr();
         }
 
         public static double[,] RingsPostProcessing(double[,] image, int size, int radius = 1)

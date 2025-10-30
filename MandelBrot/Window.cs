@@ -7,15 +7,15 @@ namespace MandelBrot
     {
 
         Bitmap canvas;
-        FractalManager fctlMgr, jliaMgr;
+        FractalManager mandelMgr, juliaMgr;
 
         private int width, height;
 
-        public static int   paletteSize,
-                            paletteScrollDelta = 1,
-                            ringSize = 1;
+        public static int   paletteSize         = 33,
+                            paletteScrollDelta  =  1,
+                            ringSize            =  2;
 
-        private Gradients.GradientColor gradient;
+        private Gradients.GradientColor gradient = new Gradients.GradientColor();
 
         private double  zoomChange = 5.00,
                         powChange  = 0.10;
@@ -46,25 +46,20 @@ namespace MandelBrot
 
             InitializeComponent();
 
-            width = this.ClientSize.Width;
-            height = this.ClientSize.Height;
+            width = this.ClientSize.Width; height = this.ClientSize.Height; //Get the width & height of the screen
             canvas = new Bitmap(width, height, PixelFormat.Format24bppRgb); //Initialize a canvas using the height & width
 
-            fctlMgr = new FractalManager(width / 2, height);
-            jliaMgr = new FractalManager(width / 2, height, true);
+            mandelMgr = new FractalManager(width / 2, height);              //Instantiate the mandel type manager field with the width & height
+            juliaMgr  = new FractalManager(width / 2, height, true);        //Instantiate the julia  type manager field
             MandelMath.SetWidthHeight(width / 2, height);
 
-            //Initialize Color setting    
-            gradient = new Gradients.GradientColor();   //Initialize the gradient manager
-            gradient.setColors(Gradients.Gradients.surlendemainColors, Gradients.Gradients.surlendemainStops);   //Initiate the gradient, picked from Gradients
-            ColorMnH.SetNewType("escapetime");                       //Set the colormethods default type
             gradient.generatePalette(paletteSize);                       //Calculate the gradient
 
-            fctlMgr.Update("mandel");
-            jliaMgr.SetJuliaC(new(-0.75, 0.25));
-            jliaMgr.SetZoom(0.90);
-            jliaMgr.SetCenter(new ComplexNumber());
-            jliaMgr.Update("mandel");
+            mandelMgr.Update("mandel");
+            juliaMgr.SetJuliaC(new(-0.75, 0.25)); 
+            juliaMgr.SetZoom(0.90);
+            juliaMgr.SetCenter(new ComplexNumber());
+            juliaMgr.Update("mandel");
             PrintData();
 
             //Inputs
@@ -82,7 +77,7 @@ namespace MandelBrot
 
             //Left side (regular fractal / Julia map)
 
-            double[,] screen = fctlMgr.GetScreen();   //Get the right side screen
+            double[,] screen = mandelMgr.GetScreen();   //Get the right side screen
             if (colorMethods[colorMethod].Equals("rings"))
             {
                 screen = ColorMnH.RingsPostProcessing(screen, ringSize);
@@ -95,7 +90,7 @@ namespace MandelBrot
 
             //Right side (Julia set)
 
-            screen = jliaMgr.GetScreen();
+            screen = juliaMgr.GetScreen();
             if (colorMethods[colorMethod].Equals("rings"))
             {
                 screen = ColorMnH.RingsPostProcessing(screen, ringSize);
@@ -108,11 +103,11 @@ namespace MandelBrot
             this.Invalidate();  //Redraw screen
         }
         //Regenerates both sides of the screen
-        private void RegenBoth() { fctlMgr.Update(type); jliaMgr.Update(type); }
+        private void RegenBoth() { mandelMgr.Update(type); juliaMgr.Update(type); }
         //Regenerates the Mandel type side only
-        private void RegenMandel() { fctlMgr.Update(type); }
+        private void RegenMandel() { mandelMgr.Update(type); }
         //Regenerates the Julia type side only
-        private void RegenJulia() { jliaMgr.Update(type); }
+        private void RegenJulia() { juliaMgr.Update(type); }
         private void PrintOrbit(int x, int y)
         {
             
@@ -126,17 +121,17 @@ namespace MandelBrot
             String phoenP = ""; //Additional information if it's the phoenix fractal
             if (type.ToLower().Equals("phoenix")) 
             {
-                phoenP = fctlMgr.GetPhoenixP().ToString();
+                phoenP = mandelMgr.GetPhoenixP().ToString();
                 phoenP = "Phoenix C: " + phoenP;
             }
 
-            return "Type?\t"            + type                  + "\n"
-                    + "Center:\t"       + fctlMgr.GetCenter()   + "\n"
-                    + "Zoom:\t"         + fctlMgr.GetZoom()     + "\n"
-                    + "n:\t"            + fctlMgr.GetN()        + "\n"
-                    + "Julia C:\t"      + jliaMgr.GetJuliaC()   + "\n"
-                    + "Julia Center:\t" + jliaMgr.GetCenter()   + "\n"
-                    + "Julia Zoom:\t"   + jliaMgr.GetZoom()     + "\n"
+            return "Type?\t\t"          + type                  + "\n"
+                    + "Center:\t\t"     + mandelMgr.GetCenter()   + "\n"
+                    + "Zoom:\t\t"       + mandelMgr.GetZoom()     + "\n"
+                    + "n:\t\t"          + mandelMgr.GetN()        + "\n"
+                    + "Julia C:\t\t"    + juliaMgr.GetJuliaC()   + "\n"
+                    + "Julia Center:\t" + juliaMgr.GetCenter()   + "\n"
+                    + "Julia Zoom:\t"   + juliaMgr.GetZoom()     + "\n"
                     + phoenP + "\n";
                 
         }
@@ -146,13 +141,13 @@ namespace MandelBrot
             String[] arr = new String[8];
 
             arr[0] = type;
-            arr[1] = fctlMgr.GetCenter()    .ToStringNoi();
-            arr[2] = fctlMgr.GetZoom()      .ToString();
-            arr[3] = fctlMgr.GetN()         .ToString();
-            arr[4] = jliaMgr.GetJuliaC()    .ToStringNoi();
-            arr[5] = jliaMgr.GetCenter()    .ToStringNoi();
-            arr[6] = jliaMgr.GetZoom()      .ToString();
-            arr[7] = fctlMgr.GetPhoenixP()  .ToStringNoi();
+            arr[1] = mandelMgr.GetCenter()    .ToStringNoi();
+            arr[2] = mandelMgr.GetZoom()      .ToString();
+            arr[3] = mandelMgr.GetN()         .ToString();
+            arr[4] = juliaMgr.GetJuliaC()    .ToStringNoi();
+            arr[5] = juliaMgr.GetCenter()    .ToStringNoi();
+            arr[6] = juliaMgr.GetZoom()      .ToString();
+            arr[7] = mandelMgr.GetPhoenixP()  .ToStringNoi();
 
             return arr;
         }
@@ -316,23 +311,23 @@ Keyboard:
 
             if (mandelSide)
             {
-                clicked = MandelMath.GetC(x, y, fctlMgr.GetZoom(), fctlMgr.GetCenter().GetReal(), fctlMgr.GetCenter().GetImaginary());
-                fctlMgr.SetCenter(clicked);
+                clicked = MandelMath.GetC(x, y, mandelMgr.GetZoom(), mandelMgr.GetCenter().GetReal(), mandelMgr.GetCenter().GetImaginary());
+                mandelMgr.SetCenter(clicked);
             }
             else
             {
-                clicked = MandelMath.GetC(x - (width / 2), y, jliaMgr.GetZoom(), jliaMgr.GetCenter().GetReal(), jliaMgr.GetCenter().GetImaginary());
-                jliaMgr.SetCenter(clicked);
+                clicked = MandelMath.GetC(x - (width / 2), y, juliaMgr.GetZoom(), juliaMgr.GetCenter().GetReal(), juliaMgr.GetCenter().GetImaginary());
+                juliaMgr.SetCenter(clicked);
             }
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    if (mandelSide) fctlMgr.ChangeZoom(zoomChange);
-                    else            jliaMgr.ChangeZoom(zoomChange);
+                    if (mandelSide) mandelMgr.ChangeZoom(zoomChange);
+                    else            juliaMgr.ChangeZoom(zoomChange);
                     break;
                 case MouseButtons.Right:
-                    if (mandelSide) fctlMgr.ChangeZoom(1.0 / zoomChange);
-                    else            jliaMgr.ChangeZoom(1.0 / zoomChange);
+                    if (mandelSide) mandelMgr.ChangeZoom(1.0 / zoomChange);
+                    else            juliaMgr.ChangeZoom(1.0 / zoomChange);
                     break;
             }
             if (mandelSide) RegenMandel(); else RegenJulia(); //regenerate the one that has been changed
@@ -351,10 +346,10 @@ Keyboard:
             {
                 //n / power control
                 case System.Windows.Forms.Keys.Q:
-                    fctlMgr.ChangeN(powChange); jliaMgr.ChangeN(powChange);
+                    mandelMgr.ChangeN(powChange); juliaMgr.ChangeN(powChange);
                     RegenBoth(); PrintData(); break;
                 case System.Windows.Forms.Keys.W:
-                    fctlMgr.ChangeN(-powChange); jliaMgr.ChangeN(-powChange);
+                    mandelMgr.ChangeN(-powChange); juliaMgr.ChangeN(-powChange);
                     RegenBoth(); PrintData(); break;
 
                 //Julia control
@@ -364,22 +359,22 @@ Keyboard:
                     int x1 = Math.Max(Math.Min(clientPos1.X, width), 0);
                     int y1 = Math.Max(Math.Min(clientPos1.Y, height), 0);
 
-                    jliaMgr.SetJuliaC(MandelMath.GetC(x1, y1, fctlMgr.GetZoom(), fctlMgr.GetCenter().GetReal(), fctlMgr.GetCenter().GetImaginary())); //Gets the complex number we clicked on
+                    juliaMgr.SetJuliaC(MandelMath.GetC(x1, y1, mandelMgr.GetZoom(), mandelMgr.GetCenter().GetReal(), mandelMgr.GetCenter().GetImaginary())); //Gets the complex number we clicked on
 
                     RegenJulia(); PrintData(); break;
                     
                 //Prefab zooms
                 case System.Windows.Forms.Keys.D1:
-                    fctlMgr.SetZoom(1.00); fctlMgr.SetCenter(new ComplexNumber(-0.5, 0));
-                    jliaMgr.SetZoom(1.00); jliaMgr.SetCenter(new ComplexNumber(-0.5, 0));
+                    mandelMgr.SetZoom(1.00); mandelMgr.SetCenter(new ComplexNumber(-0.5, 0));
+                    juliaMgr.SetZoom(1.00); juliaMgr.SetCenter(new ComplexNumber(-0.5, 0));
                     RegenBoth(); PrintData(); break;
                 case System.Windows.Forms.Keys.D2:
-                    fctlMgr.SetZoom(0.90); fctlMgr.SetCenter(new ComplexNumber(0.0, 0));
-                    jliaMgr.SetZoom(0.90); jliaMgr.SetCenter(new ComplexNumber(0.0, 0));
+                    mandelMgr.SetZoom(0.90); mandelMgr.SetCenter(new ComplexNumber(0.0, 0));
+                    juliaMgr.SetZoom(0.90); juliaMgr.SetCenter(new ComplexNumber(0.0, 0));
                     RegenBoth(); PrintData(); break;
                 case System.Windows.Forms.Keys.D3:
-                    fctlMgr.SetZoom(0.80); fctlMgr.SetCenter(new ComplexNumber(-0.50, -0.50));
-                    jliaMgr.SetZoom(0.80); jliaMgr.SetCenter(new ComplexNumber(-0.50, -0.50));
+                    mandelMgr.SetZoom(0.80); mandelMgr.SetCenter(new ComplexNumber(-0.50, -0.50));
+                    juliaMgr.SetZoom(0.80); juliaMgr.SetCenter(new ComplexNumber(-0.50, -0.50));
                     RegenBoth(); PrintData(); break;
 
                 //Changing fractals
@@ -388,7 +383,7 @@ Keyboard:
                 case System.Windows.Forms.Keys.C: type = "tricorn"; RegenBoth(); PrintData(); break;
                 case System.Windows.Forms.Keys.V: type = "celtic"; RegenBoth(); PrintData(); break;
                 case System.Windows.Forms.Keys.B: type = "lambda"; RegenBoth(); PrintData(); break;
-                case System.Windows.Forms.Keys.N: type = "phoenix"; jliaMgr.SetJuliaC(new(.5666667, 0)); RegenBoth(); PrintData(); break;
+                case System.Windows.Forms.Keys.N: type = "phoenix"; juliaMgr.SetJuliaC(new(.5666667, 0)); RegenBoth(); PrintData(); break;
 
                 case System.Windows.Forms.Keys.E:
                     String[] defaults =
@@ -421,19 +416,19 @@ Keyboard:
                     if (inputs != null) //If user input stuff parse the inputs
                     {
                         type = inputs[0];
-                        fctlMgr.GetCenter().Parse(inputs[1]);
-                        jliaMgr.GetCenter().Parse(inputs[5]);
+                        mandelMgr.GetCenter().Parse(inputs[1]);
+                        juliaMgr.GetCenter().Parse(inputs[5]);
 
-                        jliaMgr.GetJuliaC().Parse(inputs[4]);
+                        juliaMgr.GetJuliaC().Parse(inputs[4]);
 
-                        fctlMgr.SetZoom(double.Parse(inputs[2]));
-                        jliaMgr.SetZoom(double.Parse(inputs[6]));
+                        mandelMgr.SetZoom(double.Parse(inputs[2]));
+                        juliaMgr.SetZoom(double.Parse(inputs[6]));
 
-                        fctlMgr.SetN(double.Parse(inputs[3]));
-                        jliaMgr.SetN(double.Parse(inputs[3]));
+                        mandelMgr.SetN(double.Parse(inputs[3]));
+                        juliaMgr.SetN(double.Parse(inputs[3]));
 
-                        fctlMgr.GetPhoenixP().Parse(inputs[7]);
-                        jliaMgr.GetPhoenixP().Parse(inputs[7]);
+                        mandelMgr.GetPhoenixP().Parse(inputs[7]);
+                        juliaMgr.GetPhoenixP().Parse(inputs[7]);
 
                         RegenBoth(); PrintData();
                     }

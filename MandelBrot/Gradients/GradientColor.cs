@@ -11,6 +11,12 @@ namespace MandelBrot.Gradients
     {
         private Color[] palette = Array.Empty<Color>();
 
+        public GradientColor() 
+        {
+            setColors( Gradients.surlendemainColors,        //Set the colors of the gradient controller to a default one
+                       Gradients.surlendemainStops );       //Set the stops to a default one
+        }
+
         public void generatePalette(int size)
         {
             if (size <= 0 || colors.Length == 0 || locations.Length == 0 || colors.Length != locations.Length)

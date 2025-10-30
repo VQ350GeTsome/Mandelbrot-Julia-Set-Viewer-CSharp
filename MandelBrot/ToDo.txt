@@ -1,0 +1,12 @@
+
+
++ Fix the ring color method
++ Color method selector, not just the 'A' key cycler
++ Ring color method ring size selecter
++ Custom color gradients with colors and stops inputed by the user
++ Compact the MandelMath fractal calculators
++ Make the screen resizable
++ When using 1, 2, 3, etc default zooms, get which side the mouse
+	is on and apply the zoom to that side, ie, if the mouse is on
+	the mandel side, and 1 is pressed, apply that zoom to the 
+	mandel side only so it doesn't effect both sides
