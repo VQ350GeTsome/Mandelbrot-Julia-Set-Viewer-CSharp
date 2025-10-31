@@ -13,7 +13,7 @@ namespace MandelBrot
 
         public static int   paletteSize         = 33,
                             paletteScrollDelta  =  1,
-                            ringSize            =  2;
+                            ringSize            =  5;
 
         private Gradients.GradientColor gradient = new Gradients.GradientColor();
 

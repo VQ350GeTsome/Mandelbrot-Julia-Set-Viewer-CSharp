@@ -28,7 +28,8 @@ namespace MandelBrot
                     Window.paletteSize = 1000;          //Up the paletteSize a ton because we multiply the return by 10
                     break;
                 case "rings":
-                    
+                    Window.paletteScrollDelta = 1;
+                    Window.paletteSize = 10;
                     break;
             }
         }
@@ -41,7 +42,7 @@ namespace MandelBrot
                 case "smoothescapetime": 
                     return 10 * (i + 1 - Math.Log(Math.Log(z.GetDistSqr())) / Math.Log(2)); 
                     break;
-                case "rings": return i; 9break;
+                case "rings": return i; break;
 
                 default: return i; break;
             }
@@ -78,33 +79,36 @@ namespace MandelBrot
                         }
                 }
             }
-            return Blur(returnImage, size);
+            return (size < 1) ? returnImage : Sum(returnImage, size);
         }
 
-        public static double[,] Blur(double[,] image, int radius = 5) 
+        public static double[,] Sum(double[,] image, int radius = 5) 
         {
             int width  = image.GetLength(0),
                 height = image.GetLength(1);
-            double[,] blurred = new double[width, height];
+            double[,] summed = new double[width, height];
 
             for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)    //Loop the image
             {
                     double value    = 0;
                     int count       = 0;
-                    for (int dx = -radius; dx <= radius; dx++) for (int dy = -radius; dy <= radius; dy++)
+                    for (int dx = -radius; dx <= radius; dx++) for (int dy = -radius; dy <= radius; dy++)   
                     {
-                        int nx = x + dx;
-                        int ny = y + dy;
+                        if (dx * dx + dy * dy <= radius * radius)   //If (dx, dy) is within a circle of radius size
+                        { 
+                            int nx = x + dx;
+                            int ny = y + dy;
 
-                        if (nx >= 0 && nx < width && ny >= 0 && ny < height)
-                        {
-                            value += image[nx, ny];
-                            count++;
+                            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                            {
+                                value += image[nx, ny];
+                                count++;
+                            }
                         }
                     }
-                    blurred[x, y] = value / 5.0;
+                    summed[x, y] = value / 5.0;
             }
-            return blurred; 
+            return summed; 
         }
     }
 }
