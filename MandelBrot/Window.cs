@@ -12,8 +12,11 @@ namespace MandelBrot
         private int width, height;
 
         public static int   paletteSize         = 33,
-                            paletteScrollDelta  =  1,
-                            ringSize            =  5;
+                            paletteScrollDelta  =  1;
+
+        private int ringSize    =    5;
+        private bool ringEdges  = true;
+            
 
         private Gradients.GradientColor gradient = new Gradients.GradientColor();
 
@@ -80,7 +83,7 @@ namespace MandelBrot
             double[,] screen = mandelMgr.GetScreen();   //Get the right side screen
             if (colorMethods[colorMethod].Equals("rings"))
             {
-                screen = ColorMnH.RingsPostProcessing(screen, ringSize);
+                screen = ColorMnH.RingsPostProcessing(screen, ringSize, edge: ringEdges);
             }
             for (int x = 0; x < width / 2; x++) for (int y = 0; y < height; y++)    //Loop over it and print it to the screen
             {
@@ -93,7 +96,7 @@ namespace MandelBrot
             screen = juliaMgr.GetScreen();
             if (colorMethods[colorMethod].Equals("rings"))
             {
-                screen = ColorMnH.RingsPostProcessing(screen, ringSize);
+                screen = ColorMnH.RingsPostProcessing(screen, ringSize, edge: ringEdges);
             }
             for (int x = 0; x < width / 2; x++) for (int y = 0; y < height; y++)
                 {

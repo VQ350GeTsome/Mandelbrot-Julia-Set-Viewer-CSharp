@@ -20,16 +20,16 @@ namespace MandelBrot
             switch (type)
             {
                 case "escapetime": 
-                    Window.paletteScrollDelta = 1;      //Scrolls do more when we return i so lessen them to just 1
-                    Window.paletteSize = 33;            //Reset the palette to the default 33 ... which i like             
+                    Window.paletteScrollDelta   =  1;   //Scrolls do more when we return i so lessen them to just 1
+                    Window.paletteSize          = 33;   //Reset the palette to the default 33 ... which i like             
                     break;
                 case "smoothescapetime": 
-                    Window.paletteScrollDelta = 10;     //Up the scroll delta to 10 since it takes more to see much of a change
-                    Window.paletteSize = 1000;          //Up the paletteSize a ton because we multiply the return by 10
+                    Window.paletteScrollDelta   =   10; //Up the scroll delta to 10 since it takes more to see much of a change
+                    Window.paletteSize          = 1000; //Up the paletteSize a ton because we multiply the return by 10
                     break;
                 case "rings":
-                    Window.paletteScrollDelta = 1;
-                    Window.paletteSize = 10;
+                    Window.paletteScrollDelta   =  1;
+                    Window.paletteSize          = 25;
                     break;
             }
         }
@@ -40,19 +40,15 @@ namespace MandelBrot
             {
                 case "escapetime": return i; break;
                 case "smoothescapetime": 
-                    return 10 * (i + 1 - Math.Log(Math.Log(z.GetDistSqr())) / Math.Log(2)); 
+                    return 10 * (i + 1 - Math.Log(Math.Log(z.GetDistSqr())) / 0.69314718); //(0.69314718 ~= ln(2))
                     break;
                 case "rings": return i; break;
 
                 default: return i; break;
             }
         }
-        public static double GetNewValue(ComplexNumber z)
-        {
-            return z.GetDistSqr();
-        }
 
-        public static double[,] RingsPostProcessing(double[,] image, int size, int radius = 1)
+        public static double[,] RingsPostProcessing(double[,] image, int ringSize, int checkRadius = 1, bool edge = true)
         {
             int width  = image.GetLength(0),
                 height = image.GetLength(1);
@@ -61,8 +57,8 @@ namespace MandelBrot
 
             for (int x = 0; x < width; x++) for (int y = 0; y < height; y++)    //Loop the image
             {
-                if (   x >= radius && x + radius < width && 
-                       y >= radius && y + radius < height   )   //If the point is in the screen enough to have a radius
+                if (   x >= checkRadius && x + checkRadius < width && 
+                       y >= checkRadius && y + checkRadius < height   )   //If the point is in the screen enough to have a radius
                 {
                         double  center = image[x, y],
                                 above  = image[x, y - 1],
@@ -79,10 +75,10 @@ namespace MandelBrot
                         }
                 }
             }
-            return (size < 1) ? returnImage : Sum(returnImage, size);
+            return (ringSize < 1) ? returnImage : RingsSum(returnImage, image, ringSize, edge);
         }
 
-        public static double[,] Sum(double[,] image, int radius = 5) 
+        public static double[,] RingsSum(double[,] image, double[,] original, int radius, bool edge) 
         {
             int width  = image.GetLength(0),
                 height = image.GetLength(1);
@@ -92,21 +88,23 @@ namespace MandelBrot
             {
                     double value    = 0;
                     int count       = 0;
-                    for (int dx = -radius; dx <= radius; dx++) for (int dy = -radius; dy <= radius; dy++)   
-                    {
-                        if (dx * dx + dy * dy <= radius * radius)   //If (dx, dy) is within a circle of radius size
-                        { 
-                            int nx = x + dx;
-                            int ny = y + dy;
+                    if (original[x, y] != -1 || !edge) {
+                        for (int dx = -radius; dx <= radius; dx++) for (int dy = -radius; dy <= radius; dy++)   
+                        {
+                            if (dx * dx + dy * dy <= radius * radius)   //If (dx, dy) is within a circle of radius size
+                            { 
+                                int nx = x + dx;
+                                int ny = y + dy;
 
-                            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
-                            {
-                                value += image[nx, ny];
-                                count++;
+                                if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                                {
+                                    value += image[nx, ny];
+                                    count++;
+                                }
                             }
                         }
+                        summed[x, y] = value;
                     }
-                    summed[x, y] = value / 5.0;
             }
             return summed; 
         }
