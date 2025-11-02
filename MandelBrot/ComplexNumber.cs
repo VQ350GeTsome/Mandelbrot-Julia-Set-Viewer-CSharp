@@ -9,7 +9,7 @@ namespace MandelBrot
 {
     public class ComplexNumber
     {
-        private double real = 0, imaginary = 0;
+        public double real = 0, imaginary = 0;
         private double? cachedR = null, cachedTheta = null;
 
         public ComplexNumber(double r, double i) { real = r; imaginary = i; }
@@ -20,19 +20,28 @@ namespace MandelBrot
             return real == o.real && imaginary == o.imaginary;
         }
 
-        #region static operations
+        #region operator overloaders
 
-        //Multiplies this complex number with another (other)
-        private static ComplexNumber Multiply(ComplexNumber p, ComplexNumber q)
+        //Additon operator, adds two complex number together
+        public static ComplexNumber operator + (ComplexNumber a, ComplexNumber b) =>
+            new(a.real + b.real, a.imaginary + b.imaginary);
+
+        //Subtraction operator, subtracts one complex number from another
+        public static ComplexNumber operator - (ComplexNumber a, ComplexNumber b) =>
+            new(a.real - b.real, a.imaginary - b.imaginary);
+
+        //Multiplication operator, multiplies two complex numbers together
+        public static ComplexNumber operator * (ComplexNumber a, ComplexNumber b)
         {
-            return new ComplexNumber((p.GetReal() * q.GetReal()) - (p.GetImaginary() * q.GetImaginary()), //The new real component is (r * or) - (i * oi) ... minus because i * i = -1
-                (p.GetReal() * q.GetImaginary()) + (q.GetReal() * p.GetImaginary()));                     //The new imaginary component is (r * oi) + (i * or)
+            return new ((a.GetReal() * b.GetReal()) - (a.GetImaginary() * b.GetImaginary()), //The new real component is (r * or) - (i * oi) ... minus because i * i = -1
+                (a.GetReal() * b.GetImaginary()) + (b.GetReal() * a.GetImaginary()));                     //The new imaginary component is (r * oi) + (i * or)
         }
-        //Returns a complex number that is it^n
-        public static ComplexNumber Pow(ComplexNumber o, double n) 
+
+        //Exponential operator, exponentiates a complex number by some double
+        public static ComplexNumber operator ^ (ComplexNumber a, double n) 
         {
-            double r = o.GetMagnitude();  //Cached
-            double theta = o.GetAngle();  //Cached
+            double r = a.GetMagnitude();  //Cached
+            double theta = a.GetAngle();  //Cached
 
             double newR = Math.Pow(r, n);
             double newTheta = theta * n;
@@ -40,42 +49,18 @@ namespace MandelBrot
             double real = newR * Math.Cos(newTheta);
             double imag = newR * Math.Sin(newTheta);
 
-            return new ComplexNumber(real, imag);
+            return new (real, imag);
         }
+
+        //Scale operator, scales a complex number by some double
+        public static ComplexNumber operator | (ComplexNumber a, double n) => 
+            new ComplexNumber(a.real * n, a.imaginary * n);
+        
 
         #endregion
 
         #region regular operations
 
-        //Adds two complex numbers
-        public ComplexNumber Add(ComplexNumber other)
-        {
-            return new ComplexNumber(real + other.GetReal(), imaginary + other.GetImaginary());
-        }
-        //Subtracts two complex numbers
-        public ComplexNumber Subtract(ComplexNumber o)
-        {
-            return new ComplexNumber(real - o.GetReal(), imaginary - o.GetImaginary());
-        }
-        //Raises the complex number to the nth power
-        public ComplexNumber Pow(double n)
-        {
-            double r = GetMagnitude();
-            double theta = GetAngle();
-
-            double newR = Math.Pow(r, n);
-            double newTheta = theta * n;
-
-            double real = newR * Math.Cos(newTheta);
-            double imag = newR * Math.Sin(newTheta);
-
-            return new ComplexNumber(real, imag);
-        }
-        //Scales the complex number by the input
-        public ComplexNumber Scale(double s)
-        {
-            return new ComplexNumber(real * s, imaginary * s);
-        }
         //Returns the absolute value each component 
         public ComplexNumber Abs()
         {
@@ -86,13 +71,7 @@ namespace MandelBrot
         {
             return new ComplexNumber(real, -imaginary);
         }
-        //Multiplies this number with another
-        public ComplexNumber Multiply(ComplexNumber o)
-        {
-            double real = (this.real * o.GetReal()) - (this.imaginary * o.imaginary);
-            double imag = (this.real * o.GetImaginary()) + (this.imaginary * o.GetReal());
-            return new ComplexNumber(real, imag);
-        }
+
         public ComplexNumber AddReal(double r)
         {
             return new ComplexNumber(real + r, imaginary);

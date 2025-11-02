@@ -27,7 +27,7 @@ namespace MandelBrot
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = z.Pow(n).Add(c);                            //Mandelbrot is z = z^n + c ... the simplest of them all
+                z = (z^n) + c;                            
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at the orgin return -1
@@ -40,7 +40,7 @@ namespace MandelBrot
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = z.Abs().Pow(n).Add(c);                      //The burning ship is z = (|real(z)| + |imag(z)|)^n + c
+                z = (z.Abs()^n) + c;                            //The burning ship is z = (|real(z)| + |imag(z)|)^n + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
@@ -53,7 +53,7 @@ namespace MandelBrot
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = z.Conjugate().Pow(n).Add(c);                //The Tricorn fractal is z = conjugate(z)^n + c
+                z = (z.Conjugate() ^ n) + c;                //The Tricorn fractal is z = conjugate(z)^n + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
@@ -66,9 +66,9 @@ namespace MandelBrot
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = z.Pow(n);                                   
+                z = z^n;                                   
                 z = new ComplexNumber(Math.Abs(z.GetReal()), z.GetImaginary());
-                z = z.Add(c);                                   //The Celtic fractal is z = (real(|z^2|) + imag(z^2)) + c
+                z = z + c;                                      //The Celtic fractal is z = (real(|z^2|) + imag(z^2)) + c
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
@@ -81,7 +81,7 @@ namespace MandelBrot
             double dist = 0;
             for (int i = 0; i < iterations; i++)
             {
-                z = l.Multiply(z.Multiply(z.SubtractReal(-1))); //Lambda fractal is z = l * z(1 - z)
+                z = l * (z * (z.SubtractReal(-1)));             //Lambda fractal is z = l * z(1 - z)
                 dist = z.GetDistSqr();                          //Gets the distance from the orgin (squared)
                 if (dist > 4) { return GetValue(i, z); }        //If z is deemed unbounded (>4) return i
                 if (dist < epsilon) { return -1; }              //If z is at ts
@@ -94,7 +94,7 @@ namespace MandelBrot
             ComplexNumber z_n1 = new(0, 0); // z_{n-1}
             for (int i = 0; i < iterations; i++)
             {
-                ComplexNumber z_1 = z.Pow(n).Add(c).Add(p.Multiply(z_n1));
+                ComplexNumber z_1 = (z^n) + c + (p * z_n1);
                 dist = z_1.GetDistSqr();
                 if (dist > 4) { return GetValue(i, z_1); }
                 if (dist < epsilon) { return -1; }
@@ -110,17 +110,7 @@ namespace MandelBrot
         //Returns an array of points that is the orbit
         public static Point[] MandelOrbit(ComplexNumber z, ComplexNumber c, double n, double zoom, double centerReal, double centerImag)
         {
-            double dist = 0;
-            Point[] points = new Point[iterations];
-            for (int i = 0; i < iterations; i++)
-            {
-                z.Pow(n).Add(c);                                //Mutate z
-                dist = z.GetDistSqr();                          //Gets the distance from the orgin
-                points[i] = GetXYfromC(z, zoom, centerReal, centerImag); 
-                if (dist > 4) { return points; }                //If z is deemed unbounded (>2) return the points array
-                if (dist < epsilon) { return points; }          //If z is at the orgin return the point array
-            }
-            return points;
+            return null;
         }
 
         private static double GetValue(int i, ComplexNumber z)

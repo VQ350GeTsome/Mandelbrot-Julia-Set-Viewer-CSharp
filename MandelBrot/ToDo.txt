@@ -1,4 +1,5 @@
 
++ (Add), - (Remove), ? (Questioning), # (Make better)
 
 + Color method selector, not just the 'A' key cycler
 + Ring color method ring size selecter
@@ -9,3 +10,6 @@
 	is on and apply the zoom to that side, ie, if the mouse is on
 	the mandel side, and 1 is pressed, apply that zoom to the 
 	mandel side only so it doesn't effect both sides
++ Add a custom formula parser
+
+? Add quaternions & calculate 4D fractals to then get a 2D slice
